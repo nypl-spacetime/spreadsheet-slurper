@@ -1,4 +1,4 @@
-# google-spreadsheets
+# spreadsheet-slurper
 
 Reads data from a __public__ and __published__ Google Spreadsheet. To be used in Space/Time Directory ETL modules.
 
