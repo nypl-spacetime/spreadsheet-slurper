@@ -1,0 +1,16 @@
+{
+  "key": "1yiIaR24sJnhOO_QOJA-4KggcBhTNPGWp8atkkiveKTU",
+  "columns": [
+    "name",
+    "category",
+    "page",
+    "yearfrom",
+    "yearto",
+    "history",
+    "records ",
+    "url",
+    "latitude",
+    "longitude",
+    "geometry"
+  ]
+}
