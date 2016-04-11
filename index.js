@@ -1,34 +1,21 @@
 var H = require('highland')
 var R = require('ramda')
 var GoogleSpreadsheet = require('google-spreadsheet')
-var parse = require('wellknown')
 
-var sheet = require('./sheet.json')
+const WORKSHEET_ID = 1
 
-var doc = new GoogleSpreadsheet(sheet.key)
+module.exports.slurp = (spreadsheetKey) => {
+  const doc = new GoogleSpreadsheet(spreadsheetKey)
+  const getRows = H.wrapCallback(doc.getRows)
 
-var getRows = H.wrapCallback(doc.getRows)
+  return getRows(WORKSHEET_ID, {})
+    .flatten()
+    .map(R.omit(['save', 'del', '_xml', '_links']))
+    .map((row) => {
+      row.id = row.id
+        .replace(`https://spreadsheets.google.com/feeds/list/${spreadsheetKey}/`, '')
+        .replace('/', '-')
 
-var id = 0
-getRows(1, {})
-  .flatten()
-  .map(R.pick(sheet.columns))
-  .map((row) => {
-    id += 1
-    return {
-      id: id,
-      name: row.name,
-      validSince: row.yearfrom,
-      validUntil: row.yearto,
-      data: {
-        history: row.history,
-        url: row.url,
-        records: row.records
-      },
-      geometry: row.geometry ? parse(row.geometry) : parse(`POINT (${row.longitude} ${row.latitude})`)
-    }
-  })
-  .map(JSON.stringify)
-  .intersperse('\n')
-  .append('\n')
-  .pipe(process.stdout)
+      return row
+    })
+}

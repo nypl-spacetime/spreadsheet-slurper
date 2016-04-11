@@ -2,14 +2,26 @@
 
 Reads data from a __public__ and __published__ Google Spreadsheet. To be used in Space/Time Directory ETL modules.
 
-Run it:
+## Usage
 
-    node index.js
+Stand-alone CLI tool:
 
-Save it:
+    npm install -g nypl-spacetime/spreadsheet-slurper
 
-    node index.js > cemeteries.ndjson
+    node cli.js 1yiIaR24sJnhOO_QOJA-4KggcBhTNPGWp8atkkiveKTU
 
-Make GeoJSON:
+As a Node.js module
 
-    node index.js | pits-to-geojson | jq
+```js
+const slurper = require('./')
+// const slurper = require('spreadsheet-slurper')
+const spreadsheetKey = '1yiIaR24sJnhOO_QOJA-4KggcBhTNPGWp8atkkiveKTU'
+
+// slurper.slurp returns a Highland stream
+var stream = slurper.slurp(spreadsheetKey)
+
+// Each row is an object in the stream -
+// The HTTP URI prefix (e.g. https://spreadsheets.google.com/feeds/list/<key>)
+// is stripped from each row ID
+stream.each(console.log)
+```
